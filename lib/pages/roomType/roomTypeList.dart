@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class RoomListScreen extends StatefulWidget {
-  RoomListScreen({Key? key}) : super(key: key);
+  const RoomListScreen({Key? key}) : super(key: key);
 
   @override
   State<RoomListScreen> createState() => _RoomListScreenState();
@@ -43,21 +43,22 @@ class _RoomListScreenState extends State<RoomListScreen> {
     // print(logindata.getString('hotelData'));
     var userdata = jsonDecode(logindata.getString('userData') ?? "");
     int userId = int.parse(userdata["id"].toString());
-    try{
-    String url = "$domainUrl/api/hotel_rooms/$userId/index";
+    print("user id $userId");
+    String url = "$domainUrl/hotel_rooms/$userId/index";
     final response = await http.get(Uri.parse(url), headers: headers);
-
-    if (response.statusCode == 200) {
-      final List result = json.decode(response.body);
-      print(result);
-      return result.map((e) => RegisterroomsModel.fromJson(e)).toList();
-    } else {
-      
-      throw Exception(json.decode(response.body));
+    final result = json.decode(response.body);
+    try {
+      if (response.statusCode == 200 && result['success']) {
+        print(result);
+        return result.map((e) => RegisterroomsModel.fromJson(e)).toList();
+      } else {
+        print(json.decode(response.body));
+        return [];
+      }
+    } catch (e) {
+      print(e);
+      return [];
     }
-    }catch(e){ 
-       print (e); 
-       throw e;}
   }
 
   @override
@@ -99,289 +100,293 @@ class _RoomListScreenState extends State<RoomListScreen> {
                 future: fetchAlbum(),
                 builder: (context, snapshot) {
                   // if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return Form(
-                                key: _formKey,
-                                child: Container(
-                                    width: double.maxFinite,
-                                    padding: getPadding(
-                                        left: 20, top: 5, right: 20, bottom: 5),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: getPadding(top: 1),
-                                          ),
-                                          Container(
-                                              margin: getMargin(
-                                                  left: 13, top: 2, right: 13),
-                                              padding: getPadding(
-                                                  left: 14,
-                                                  top: 2,
-                                                  right: 14,
-                                                  bottom: 17),
-                                              decoration: AppDecoration
-                                                  .gradientCyanToTealA
-                                                  .copyWith(
-                                                      borderRadius:
-                                                          BorderRadiusStyle
-                                                              .roundedBorder12),
-                                              child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          getPadding(top: 10),
-                                                    ),
-                                                    Container(
-                                                        margin: getMargin(
-                                                            bottom: 1),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Align(
-                                                                alignment: Alignment
-                                                                    .centerLeft,
-                                                                child: Padding(
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Form(
+                              key: _formKey,
+                              child: Container(
+                                  width: double.maxFinite,
+                                  padding: getPadding(
+                                      left: 20, top: 5, right: 20, bottom: 5),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: getPadding(top: 1),
+                                        ),
+                                        Container(
+                                            margin: getMargin(
+                                                left: 13, top: 2, right: 13),
+                                            padding: getPadding(
+                                                left: 14,
+                                                top: 2,
+                                                right: 14,
+                                                bottom: 17),
+                                            decoration: AppDecoration
+                                                .gradientCyanToTealA
+                                                .copyWith(
+                                                    borderRadius:
+                                                        BorderRadiusStyle
+                                                            .roundedBorder12),
+                                            child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        getPadding(top: 10),
+                                                  ),
+                                                  Container(
+                                                      margin:
+                                                          getMargin(bottom: 1),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Align(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Padding(
+                                                                  padding:
+                                                                      getPadding(
+                                                                          left:
+                                                                              13,
+                                                                          right:
+                                                                              9),
+                                                                  child: Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                            padding:
+                                                                                getPadding(bottom: 1),
+                                                                            child: Text("# :", style: CustomTextStyles.titleMediumOnPrimary)),
+                                                                        Text(
+                                                                            " 14",
+                                                                            style:
+                                                                                CustomTextStyles.titleMediumOnPrimary),
+                                                                      ]))),
+                                                        ],
+                                                      )),
+                                                  Divider(
+                                                      color: theme
+                                                          .colorScheme.onPrimary
+                                                          .withOpacity(1),
+                                                      indent:
+                                                          getHorizontalSize(13),
+                                                      endIndent:
+                                                          getHorizontalSize(
+                                                              12)),
+                                                  Padding(
+                                                    padding:
+                                                        getPadding(top: 10),
+                                                  ),
+                                                  Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Padding(
+                                                          padding: getPadding(
+                                                              left: 13,
+                                                              right: 39),
+                                                          child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Padding(
                                                                     padding: getPadding(
-                                                                        left:
-                                                                            13,
-                                                                        right:
-                                                                            9),
-                                                                    child: Row(
-                                                                        children: [
-                                                                          Padding(
-                                                                              padding: getPadding(bottom: 1),
-                                                                              child: Text("# :", style: CustomTextStyles.titleMediumOnPrimary)),
-                                                                          Text(
-                                                                              " 14",
-                                                                              style: CustomTextStyles.titleMediumOnPrimary),
-                                                                        ]))),
-                                                          ],
-                                                        )),
-                                                    Divider(
-                                                        color: theme.colorScheme
-                                                            .onPrimary
-                                                            .withOpacity(1),
-                                                        indent:
-                                                            getHorizontalSize(
-                                                                13),
-                                                        endIndent:
-                                                            getHorizontalSize(
-                                                                12)),
-                                                    Padding(
+                                                                        bottom:
+                                                                            1),
+                                                                    child: Text(
+                                                                        "Name",
+                                                                        style: CustomTextStyles
+                                                                            .titleMediumOnPrimary)),
+                                                                Text(
+                                                                    // 'Room 14',
+                                                                    snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .roomsName
+                                                                        .toString(),
+                                                                    style: CustomTextStyles
+                                                                        .titleMediumOnPrimary),
+                                                              ]))),
+                                                  Padding(
                                                       padding:
-                                                          getPadding(top: 10),
-                                                    ),
-                                                    Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Padding(
-                                                            padding: getPadding(
-                                                                left: 13,
-                                                                right: 39),
-                                                            child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Padding(
-                                                                      padding: getPadding(
-                                                                          bottom:
-                                                                              1),
+                                                          getPadding(top: 16),
+                                                      child: Divider(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .onPrimary
+                                                              .withOpacity(1),
+                                                          indent:
+                                                              getHorizontalSize(
+                                                                  13),
+                                                          endIndent:
+                                                              getHorizontalSize(
+                                                                  12))),
+                                                  Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Padding(
+                                                          padding: getPadding(
+                                                              left: 13,
+                                                              right: 39),
+                                                          child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Padding(
+                                                                    padding: getPadding(
+                                                                        bottom:
+                                                                            1),
+                                                                    child: Text(
+                                                                        "Action",
+                                                                        style: CustomTextStyles
+                                                                            .titleMediumOnPrimary)),
+                                                                Row(
+                                                                  children: [
+                                                                    GestureDetector(
                                                                       child: Text(
-                                                                          "Name",
+                                                                          "Edit",
+                                                                          maxLines:
+                                                                              2,
                                                                           style:
-                                                                              CustomTextStyles.titleMediumOnPrimary)),
-                                                                  Text(
-                                                                      // 'Room 14',
-                                                                      snapshot.data![index]
-                                                                          .roomsName
-                                                                          .toString(),
-                                                                      style: CustomTextStyles
-                                                                          .titleMediumOnPrimary),
-                                                                ]))),
-                                                    Padding(
-                                                        padding:
-                                                            getPadding(top: 16),
-                                                        child: Divider(
-                                                            color: theme
-                                                                .colorScheme
-                                                                .onPrimary
-                                                                .withOpacity(1),
-                                                            indent:
-                                                                getHorizontalSize(
-                                                                    13),
-                                                            endIndent:
-                                                                getHorizontalSize(
-                                                                    12))),
-                                                    Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Padding(
-                                                            padding: getPadding(
-                                                                left: 13,
-                                                                right: 39),
-                                                            child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Padding(
-                                                                      padding: getPadding(
-                                                                          bottom:
-                                                                              1),
-                                                                      child: Text(
-                                                                          "Action",
-                                                                          style:
-                                                                              CustomTextStyles.titleMediumOnPrimary)),
-                                                                  Row(
-                                                                    children: [
-                                                                      GestureDetector(
-                                                                        child: Text(
-                                                                            "Edit",
-                                                                            maxLines:
-                                                                                2,
-                                                                            style:
-                                                                                CustomTextStyles.titleMediumOnPrimary),
-                                                                        onTap:
-                                                                            () =>
-                                                                                {
-                                                                          Alert(
-                                                                              context: context,
-                                                                              title: "Edit Details",
-                                                                              content: Column(
-                                                                                children: <Widget>[
-                                                                                  TextField(
-                                                                                    controller: roomNameController,
-                                                                                    decoration: const InputDecoration(
-                                                                                      icon: Icon(Icons.account_circle),
-                                                                                      labelText: 'Room name',
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextField(
-                                                                                    controller: priceController,
-                                                                                    obscureText: true,
-                                                                                    decoration: const InputDecoration(
-                                                                                      icon: Icon(Icons.lock),
-                                                                                      labelText: 'Price',
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextField(
-                                                                                    controller: toiletController,
-                                                                                    obscureText: true,
-                                                                                    decoration: const InputDecoration(
-                                                                                      icon: Icon(Icons.lock),
-                                                                                      labelText: 'Price',
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextField(
-                                                                                    controller: selectTypeRoomController,
-                                                                                    obscureText: true,
-                                                                                    decoration: const InputDecoration(
-                                                                                      icon: Icon(Icons.lock),
-                                                                                      labelText: 'Room type',
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextField(
-                                                                                    controller: descriptionController,
-                                                                                    obscureText: true,
-                                                                                    decoration: const InputDecoration(
-                                                                                      icon: Icon(Icons.lock),
-                                                                                      labelText: 'Description',
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              buttons: [
-                                                                                DialogButton(
-                                                                                  onPressed: () => {
-                                                                                    // update.updateAlbum(roomNameController.text, priceController.text, toiletController.text, selectTypeRoomController.text, descriptionController.text),
-                                                                                    Navigator.pop(context),
-                                                                                  },
-                                                                                  child: const Text(
-                                                                                    "UPDATE",
-                                                                                    style: TextStyle(color: Colors.white, fontSize: 20),
-                                                                                  ),
-                                                                                )
-                                                                              ]).show(),
-                                                                        },
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            20,
-                                                                      ),
-                                                                      GestureDetector(
-                                                                        child: Text(
-                                                                            "Delete",
-                                                                            maxLines:
-                                                                                2,
-                                                                            style:
-                                                                                CustomTextStyles.titleMediumOnPrimary),
-                                                                        onTap:
-                                                                            () =>
-                                                                                {
-                                                                                 
-                                                                          Alert(
+                                                                              CustomTextStyles.titleMediumOnPrimary),
+                                                                      onTap:
+                                                                          () =>
+                                                                              {
+                                                                        Alert(
                                                                             context:
                                                                                 context,
-                                                                            type:
-                                                                                AlertType.warning,
                                                                             title:
-                                                                                "Do yo want to delete",
-                                                                            desc:
-                                                                                "Press the button to continue",
+                                                                                "Edit Details",
+                                                                            content:
+                                                                                Column(
+                                                                              children: <Widget>[
+                                                                                TextField(
+                                                                                  controller: roomNameController,
+                                                                                  decoration: const InputDecoration(
+                                                                                    icon: Icon(Icons.account_circle),
+                                                                                    labelText: 'Room name',
+                                                                                  ),
+                                                                                ),
+                                                                                TextField(
+                                                                                  controller: priceController,
+                                                                                  obscureText: true,
+                                                                                  decoration: const InputDecoration(
+                                                                                    icon: Icon(Icons.lock),
+                                                                                    labelText: 'Price',
+                                                                                  ),
+                                                                                ),
+                                                                                TextField(
+                                                                                  controller: toiletController,
+                                                                                  obscureText: true,
+                                                                                  decoration: const InputDecoration(
+                                                                                    icon: Icon(Icons.lock),
+                                                                                    labelText: 'Price',
+                                                                                  ),
+                                                                                ),
+                                                                                TextField(
+                                                                                  controller: selectTypeRoomController,
+                                                                                  obscureText: true,
+                                                                                  decoration: const InputDecoration(
+                                                                                    icon: Icon(Icons.lock),
+                                                                                    labelText: 'Room type',
+                                                                                  ),
+                                                                                ),
+                                                                                TextField(
+                                                                                  controller: descriptionController,
+                                                                                  obscureText: true,
+                                                                                  decoration: const InputDecoration(
+                                                                                    icon: Icon(Icons.lock),
+                                                                                    labelText: 'Description',
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                             buttons: [
                                                                               DialogButton(
                                                                                 onPressed: () => {
-                                                                                  // delete.deleteAlbum(snapshot.data![index].hotel_id.toString()),
-
-                                                                                  // implementation of delete
+                                                                                  // update.updateAlbum(roomNameController.text, priceController.text, toiletController.text, selectTypeRoomController.text, descriptionController.text),
                                                                                   Navigator.pop(context),
                                                                                 },
-                                                                                color: const Color.fromRGBO(0, 179, 134, 1.0),
                                                                                 child: const Text(
-                                                                                  "DELETE",
-                                                                                  style: TextStyle(color: Colors.white, fontSize: 18),
-                                                                                ),
-                                                                              ),
-                                                                              DialogButton(
-                                                                                onPressed: () => {
-                                                                                  // implementation
-                                                                                  Navigator.pop(context)
-                                                                                },
-                                                                                gradient: const LinearGradient(colors: [
-                                                                                  Color.fromRGBO(116, 116, 191, 1.0),
-                                                                                  Color.fromRGBO(52, 138, 199, 1.0),
-                                                                                ]),
-                                                                                child: const Text(
-                                                                                  "CANCEL",
-                                                                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                                  "UPDATE",
+                                                                                  style: TextStyle(color: Colors.white, fontSize: 20),
                                                                                 ),
                                                                               )
-                                                                            ],
-                                                                          ).show(),
-                                                                        },
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ])))
-                                                  ])),
-                                        ])));
-                          });
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
+                                                                            ]).show(),
+                                                                      },
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 20,
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      child: Text(
+                                                                          "Delete",
+                                                                          maxLines:
+                                                                              2,
+                                                                          style:
+                                                                              CustomTextStyles.titleMediumOnPrimary),
+                                                                      onTap:
+                                                                          () =>
+                                                                              {
+                                                                        Alert(
+                                                                          context:
+                                                                              context,
+                                                                          type:
+                                                                              AlertType.warning,
+                                                                          title:
+                                                                              "Do yo want to delete",
+                                                                          desc:
+                                                                              "Press the button to continue",
+                                                                          buttons: [
+                                                                            DialogButton(
+                                                                              onPressed: () => {
+                                                                                // delete.deleteAlbum(snapshot.data![index].hotel_id.toString()),
+
+                                                                                // implementation of delete
+                                                                                Navigator.pop(context),
+                                                                              },
+                                                                              color: const Color.fromRGBO(0, 179, 134, 1.0),
+                                                                              child: const Text(
+                                                                                "DELETE",
+                                                                                style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              ),
+                                                                            ),
+                                                                            DialogButton(
+                                                                              onPressed: () => {
+                                                                                // implementation
+                                                                                Navigator.pop(context)
+                                                                              },
+                                                                              gradient: const LinearGradient(colors: [
+                                                                                Color.fromRGBO(116, 116, 191, 1.0),
+                                                                                Color.fromRGBO(52, 138, 199, 1.0),
+                                                                              ]),
+                                                                              child: const Text(
+                                                                                "CANCEL",
+                                                                                style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ).show(),
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ])))
+                                                ])),
+                                      ])));
+                        });
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
                   // }
                   return const CircularProgressIndicator();
                 }),
@@ -433,7 +438,7 @@ class _RoomListScreenState extends State<RoomListScreen> {
   //     ],
   //   ).show();
   // }
-// 
+//
   // _onAlertWithCustomContentPressed(context) {
   //   Alert(
   //       context: context,

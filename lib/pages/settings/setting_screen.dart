@@ -10,11 +10,10 @@ import 'package:hotel_booking/classes/language_constants.dart';
 import 'package:hotel_booking/main.dart';
 import 'package:hotel_booking/utils/app_export.dart';
 import 'package:hotel_booking/widgets/app_bar/appbar_subtitle.dart';
-import 'package:hotel_booking/widgets/logout_prompt.dart';
-import 'package:xen_popup_card/xen_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xen_popup_card/xen_popup_card.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
