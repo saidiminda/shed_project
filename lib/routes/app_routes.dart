@@ -14,7 +14,6 @@ import 'package:hotel_booking/pages/manage_property/view_propertyList.dart';
 import 'package:hotel_booking/pages/managecheckAvailability/checkAvailability.dart';
 import 'package:hotel_booking/pages/notification/notification.dart';
 import 'package:hotel_booking/pages/settings/account.dart';
-import 'package:hotel_booking/pages/settings/profile_page.dart';
 import 'package:hotel_booking/pages/settings/setting_screen.dart';
 import 'package:hotel_booking/pages/welcomePage/registerProperty.dart';
 import 'package:hotel_booking/pages/welcomePage/welcomePage.dart';
@@ -68,6 +67,6 @@ class AppRoutes {
     register: (context) => RegistrationScreen(),
     // delete:(context) => const Delete(),
     // update:(context)  => const Update(),
-    profile:(context) =>  ProfilePage()
+    // profile:(context) =>  ProfilePage()
   };
 }

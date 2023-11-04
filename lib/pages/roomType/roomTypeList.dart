@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
 import 'package:hotel_booking/constants.dart';
 import 'package:hotel_booking/models/roomHotel/roomHotelModel.dart';
+import 'package:hotel_booking/pages/manage_client/search_client.dart';
 import 'package:hotel_booking/service/delete&update/delete&update.dart';
 import 'package:hotel_booking/service/delete&update/update.dart';
 import 'package:hotel_booking/utils/app_export.dart';
@@ -44,7 +45,7 @@ class _RoomListScreenState extends State<RoomListScreen> {
     var userdata = jsonDecode(logindata.getString('userData') ?? "");
     int userId = int.parse(userdata["id"].toString());
     print("user id $userId");
-    String url = "$domainUrl/hotel_rooms/$userId/index";
+    String url = "$domainUrl/hotel_rooms/${userId}/index";
     final response = await http.get(Uri.parse(url), headers: headers);
     final result = json.decode(response.body);
     try {
@@ -93,9 +94,47 @@ class _RoomListScreenState extends State<RoomListScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Center(
+        child: Container(
+              width: double.maxFinite,
+              padding: getPadding(left: 20, top: 5, right: 20, bottom: 5),
             child: Column(
           children: [
+              SearchClient(),
+                Padding(
+                     padding: getPadding(left: 17,  right: 17, bottom: 5),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        gradient: const LinearGradient(colors: [
+                          Colors.orangeAccent,
+                             Colors.white,
+                          Colors.orangeAccent,
+                       
+                        ])
+                        ),
+                       
+                        child: Row(
+                           mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              "Number of Room",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              "000",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
             FutureBuilder<List<RegisterroomsModel>>(
                 future: fetchAlbum(),
                 builder: (context, snapshot) {
@@ -105,9 +144,7 @@ class _RoomListScreenState extends State<RoomListScreen> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          return Form(
-                              key: _formKey,
-                              child: Container(
+                          return  Container(
                                   width: double.maxFinite,
                                   padding: getPadding(
                                       left: 20, top: 5, right: 20, bottom: 5),
@@ -349,7 +386,7 @@ class _RoomListScreenState extends State<RoomListScreen> {
                                                                           buttons: [
                                                                             DialogButton(
                                                                               onPressed: () => {
-                                                                                // delete.deleteAlbum(snapshot.data![index].hotel_id.toString()),
+                                                                                delete.deleteAlbum(snapshot.data![index].hotel_id.toString()),
 
                                                                                 // implementation of delete
                                                                                 Navigator.pop(context),
@@ -382,12 +419,12 @@ class _RoomListScreenState extends State<RoomListScreen> {
                                                                 ),
                                                               ])))
                                                 ])),
-                                      ])));
+                                      ]));
                         });
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
                   }
-                  // }
+             
                   return const CircularProgressIndicator();
                 }),
           ],

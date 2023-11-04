@@ -91,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
                 topRight: Radius.circular(12),
                 bottomLeft: Radius.circular(12),
                 bottomRight: Radius.circular(12)),
-            child: CustomSearchView(
+            child: CustomSearchView( 
               readOnly: true,
               prefix: Padding(
                 padding: const EdgeInsets.all(10.0),

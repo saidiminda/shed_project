@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
+import 'package:hotel_booking/service/manage_rooms/roomServ.dart';
 import 'package:hotel_booking/utils/app_export.dart';
 import 'package:hotel_booking/widgets/app_bar/appbar_subtitle.dart';
 import 'package:hotel_booking/widgets/custom_outlined_button.dart';
@@ -14,6 +15,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../service/manage_rooms/roomServices.dart';
+
 // ignore_for_file: must_be_immutable
 class AddBookingScreen extends StatefulWidget {
   const AddBookingScreen({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
 
   TextEditingController roomNameController = TextEditingController();
 
+  TextEditingController servicesController = TextEditingController();
   TextEditingController checkoutTimeController = TextEditingController();
 
   TextEditingController priceController = TextEditingController();
@@ -62,23 +65,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
     await Future.delayed(const Duration(milliseconds: 1000));
     _refreshController.refreshCompleted();
   }
-
-  late String username;
-  @override
-  void initState() {
-    super.initState();
-    initial();
-  }
-
-  void initial() async {
-    logindata = await SharedPreferences.getInstance();
-    setState(() {
-      // hotelData
-      var userdata = jsonDecode(logindata.getString('hotelData') ?? "");
-      int username = int.parse(userdata['id'].toString());
-      // hotelRoomData
-    });
-  }
+  
 
   void _onLoading() async {
     // monitor network fetch
@@ -89,20 +76,24 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
 
   Future<void> _createRoom(BuildContext context) async {
     // ignore: unused_local_variable
+     var userdata = jsonDecode(logindata.getString('userData') ?? "");
+   int userId = int.parse(userdata['id'].toString());
     Map<String, dynamic> newccount = {
-      "hotel_id": username,
+      "hotel_id": 2,
       "name": roomNameController.text,
+      "service": servicesController.text,
       "price": priceController.text,
-      "toilet":toiletController.text,
+      "toilet": toiletController.text,
       "room_type": selectTypeRoomController.text,
-      "description": descriptionController.text
+      "description": descriptionController.text,
     };
-    final otpResult = await addRoom.registerRoom(newccount);
+    final otpResult = await clientServices.createClient(newccount, clientData: {});
+    // final otpResult = await clientServices.createClient(newccount, clientData: {});
     otpResult.when(
-      (registerClientResponse) => {
+      (registerResponse) => {
         // ignore: avoid_print
         print(
-            " ========================> registerClientResponse: ${registerClientResponse.hotel_id} <===================="),
+            " ========================> registerClientResponse: ${registerResponse.hotel_id} <===================="),
       },
       (exception) => {
         // ignore: avoid_print
@@ -137,10 +128,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
           onRefresh: _onRefresh,
           onLoading: _onLoading,
           header: const WaterDropHeader(
-            idleIcon: Icon(
-          Icons.autorenew, 
-          size: 25, 
-          color: Colors.white),
+            idleIcon: Icon(Icons.autorenew, size: 25, color: Colors.white),
             waterDropColor: Color.fromARGB(255, 235, 182, 113),
           ),
           child: SingleChildScrollView(
@@ -166,118 +154,150 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                                     }
                                     return null;
                                   })),
+                          Padding(
+                              padding: getPadding(left: 8, top: 10, right: 6),
+                              child: CustomTextFormField(
+                                  // translation(context).room_name
+                                  labelText: 'Services',
+                                  controller: roomNameController,
+                                  hintText: 'Services',
+                                  hintStyle: theme.textTheme.bodyLarge!,
+                                  validator: (booking) {
+                                    if (booking == null || booking.isEmpty) {
+                                      return translation(context).please_enter +
+                                          'Services';
+                                    }
+                                    return null;
+                                  })),
 
-                          SizedBox(
-                              child: Padding(
-                                  padding:
-                                      getPadding(left: 8, top: 10, right: 6),
-                                  child: DropdownButtonFormField2<String>(
-                                      isExpanded: true,
-                                      decoration: InputDecoration(
-                                        labelText:
-                                            translation(context).room_type,
-                                        hintStyle: theme.textTheme.bodyLarge!,
-                                        contentPadding: getPadding(
-                                          all: 18,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              getHorizontalSize(10.00)),
-                                          borderSide: BorderSide(
-                                            color: appTheme.tealA700,
-                                            width: 0.5,
-                                          ),
-                                        ),
-                                      ),
-                                      hint: Text(
-                                        translation(context).room_type,
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                      // the area of the following area of the table
-                                      items: roomtype
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      validator: (value) {
-                                        if (value == null) {
-                                          return translation(context).room_type;
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        //Do something when selected item is changed.
+                          // SizedBox(
+                          //     child: Padding(
+                          //         padding:
+                          //             getPadding(left: 8, top: 10, right: 6),
+                          //         child: DropdownButtonFormField2<String>(
+                          //             isExpanded: true,
+                          //             decoration: InputDecoration(
+                          //               labelText:
+                          //                   translation(context).room_type,
+                          //               hintStyle: theme.textTheme.bodyLarge!,
+                          //               contentPadding: getPadding(
+                          //                 all: 18,
+                          //               ),
+                          //               border: OutlineInputBorder(
+                          //                 borderRadius: BorderRadius.circular(
+                          //                     getHorizontalSize(10.00)),
+                          //                 borderSide: BorderSide(
+                          //                   color: appTheme.tealA700,
+                          //                   width: 0.5,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             hint: Text(
+                          //               translation(context).room_type,
+                          //               style: const TextStyle(fontSize: 12),
+                          //             ),
+                          //             // the area of the following area of the table
+                          //             items: roomtype
+                          //                 .map((item) =>
+                          //                     DropdownMenuItem<String>(
+                          //                       value: item,
+                          //                       child: Text(
+                          //                         item,
+                          //                         style: const TextStyle(
+                          //                           fontSize: 12,
+                          //                         ),
+                          //                       ),
+                          //                     ))
+                          //                 .toList(),
+                          //             validator: (value) {
+                          //               if (value == null) {
+                          //                 return translation(context).room_type;
+                          //               }
+                          //               return null;
+                          //             },
+                          //             onChanged: (value) {
+                          //               //Do something when selected item is changed.
 
-                                        selectedValue = value;
-                                      },
-                                      onSaved: (value) {
-                                        selectedValue = value.toString();
-                                      },
-                                      dropdownStyleData:
-                                          const DropdownStyleData(
-                                        maxHeight: 200,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          Icons.arrow_drop_down,
-                                        ),
-                                        iconSize: 24,
-                                      ),
-                                      dropdownSearchData: DropdownSearchData(
-                                        searchController:
-                                            selectTypeRoomController,
-                                        searchInnerWidgetHeight: 50,
-                                        searchInnerWidget: Container(
-                                          height: 50,
-                                          padding: const EdgeInsets.only(
-                                            top: 8,
-                                            bottom: 4,
-                                            right: 8,
-                                            left: 8,
-                                          ),
-                                          // the following area of the area of the angle
-                                          child: TextFormField(
-                                            expands: true,
-                                            maxLines: null,
-                                            controller:
-                                                selectTypeRoomController,
-                                            decoration: InputDecoration(
-                                              isDense: true,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 10,
-                                                vertical: 8,
-                                              ),
-                                              hintText: translation(context)
-                                                  .room_type,
-                                              hintStyle:
-                                                  const TextStyle(fontSize: 12),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        searchMatchFn: (item, searchValue) {
-                                          return item.value
-                                              .toString()
-                                              .contains(searchValue);
-                                        },
-                                      ),
-                                      //This to clear the search value when you close the menu
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          selectTypeRoomController.clear();
-                                        }
-                                      }))),
+                          //               selectedValue = value;
+                          //             },
+                          //             onSaved: (value) {
+                          //               selectedValue = value.toString();
+                          //             },
+                          //             dropdownStyleData:
+                          //                 const DropdownStyleData(
+                          //               maxHeight: 200,
+                          //             ),
+                          //             iconStyleData: const IconStyleData(
+                          //               icon: Icon(
+                          //                 Icons.arrow_drop_down,
+                          //               ),
+                          //               iconSize: 24,
+                          //             ),
+                          //             dropdownSearchData: DropdownSearchData(
+                          //               searchController:
+                          //                   selectTypeRoomController,
+                          //               searchInnerWidgetHeight: 50,
+                          //               searchInnerWidget: Container(
+                          //                 height: 50,
+                          //                 padding: const EdgeInsets.only(
+                          //                   top: 8,
+                          //                   bottom: 4,
+                          //                   right: 8,
+                          //                   left: 8,
+                          //                 ),
+                          //                 // the following area of the area of the angle
+                          //                 child: TextFormField(
+                          //                   expands: true,
+                          //                   maxLines: null,
+                          //                   controller:
+                          //                       selectTypeRoomController,
+                          //                   decoration: InputDecoration(
+                          //                     isDense: true,
+                          //                     contentPadding:
+                          //                         const EdgeInsets.symmetric(
+                          //                       horizontal: 10,
+                          //                       vertical: 8,
+                          //                     ),
+                          //                     hintText: translation(context)
+                          //                         .room_type,
+                          //                     hintStyle:
+                          //                         const TextStyle(fontSize: 12),
+                          //                     border: OutlineInputBorder(
+                          //                       borderRadius:
+                          //                           BorderRadius.circular(8),
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //               searchMatchFn: (item, searchValue) {
+                          //                 return item.value
+                          //                     .toString()
+                          //                     .contains(searchValue);
+                          //               },
+                          //             ),
+                          //             //This to clear the search value when you close the menu
+                          //             onMenuStateChange: (isOpen) {
+                          //               if (!isOpen) {
+                          //                 selectTypeRoomController.clear();
+                          //               }
+                          //             }
+                          //             )
+                          //             )
+                          //             ),
+                           Padding(
+                              padding: getPadding(left: 8, top: 10, right: 6),
+                              child: CustomTextFormField(
+                                  labelText: 'Type of Room',
+                                  controller: selectTypeRoomController,
+                                  hintText: 'Type Of Room',
+                                  hintStyle: theme.textTheme.bodyLarge!,
+                                  validator: (booking) {
+                                    if (booking == null || booking.isEmpty) {
+                                      return translation(context).please_enter +
+                                          'Room Type ';
+                                    }
+                                    return null;
+                                  })),
                           Padding(
                               padding: getPadding(left: 8, top: 10, right: 6),
                               child: CustomTextFormField(
@@ -349,17 +369,17 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                                 hintText: translation(context).price,
                                 hintStyle: theme.textTheme.bodyLarge!,
                                 textInputAction: TextInputAction.next,
-                                textInputType: const TextInputType.numberWithOptions(
+                                textInputType:
+                                    const TextInputType.numberWithOptions(
                                   decimal: true,
-                                  // signed: true,
                                 ),
-                                inputFormatters: [
-                                  CurrencyInputFormatter(
-                                    thousandSeparator: ThousandSeparator.Comma,
-                                    mantissaLength: 2,
-                                    trailingSymbol: "\Tsh",
-                                  )
-                                ],
+                                // inputFormatters: [
+                                //   CurrencyInputFormatter(
+                                //     thousandSeparator: ThousandSeparator.Comma,
+                                //     mantissaLength: 2,
+                                //     trailingSymbol: "\Tsh",
+                                //   )
+                                // ],
                                 validator: (booking) {
                                   // the given area of the table
                                   if (booking == null || booking.isEmpty) {
@@ -403,15 +423,12 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                               onTap: () {
                                 if (_formKey.currentState!.validate()) {
                                   _createRoom(context);
-                                  onTapSave(context);
-                                  Navigator.pop(context);
+
+                                  // Navigator.pop(context);
                                 }
                               },
                               alignment: Alignment.center)
-                        ]
-                        )
-                        )
-                        ),
+                        ]))),
           )),
     ));
   }

@@ -41,43 +41,63 @@ class _AccountsScreenState extends State<AccountsScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           iconTheme: const IconThemeData(color: Color.fromARGB(255, 8, 8, 8)),
-          title: Center(
-            child: AppbarSubtitle(
-              // translation(context).add_room
-              text: 'Accounts',
-            ),
+          title:  Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppbarSubtitle(
+                  // translation(context).add_room
+                  text: 'Accounts',
+                ),
+                TextButton(
+                    onPressed: () {
+
+                    }, child: const Text('LogOut'))
+            ],
           ),
+         
         ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                Center(
-                  child: CircleAvatar(
-                      backgroundColor: const Color.fromARGB(255, 240, 191, 118),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.person_2),
-                        color: const Color.fromARGB(255, 223, 220, 220),
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor:
+                              const Color.fromARGB(255, 240, 191, 118),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.person_2),
+                            color: const Color.fromARGB(255, 223, 220, 220),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Text(name.toString()),
+                      ],
                     ),
+                    Column(
+                      children: [
+                        Text("Day Remaining",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CustomTextStyles.titleSmallBluegray700),
+                        Text("6",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CustomTextStyles.titleSmallBluegray700),
+                      ],
+                    ),
+                  ],
                 ),
-              
-                // Center(
-                //   child: FancyContainer(
-                //     onTap: () {
-                //       print("Hello World");
-                //     },
-                //     color1: Colors.lightGreenAccent,
-                //     color2: Colors.lightBlue,
-                //     title:'Personal Details',
-                //     textColor: Colors.white,
-                //     subtitle: name.toString(),
-                //     subtitleColor: Colors.white,
-                //   ),
-                // ),
+
                 Card(
+                  elevation: 0,
                   borderOnForeground: true,
                   child: Column(children: [
                     Container(
@@ -111,26 +131,31 @@ class _AccountsScreenState extends State<AccountsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Text("Personal Details",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: CustomTextStyles
-                                          .titleMediumOnPrimary),
-                               Divider(
+                            Center(
+                              child: Text("Personal Details",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: CustomTextStyles.titleMediumOnPrimary),
+                            ),
+                            Divider(
                                 color:
                                     theme.colorScheme.onPrimary.withOpacity(1),
                                 indent: getHorizontalSize(13),
                                 endIndent: getHorizontalSize(12)),
-
                             Padding(
                               padding: getPadding(top: 5),
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("Full Name:",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: CustomTextStyles
                                           .titleMediumOnPrimary),
+                                        const  SizedBox(
+                                            width:50,
+                                          ),
                                   Expanded(
                                     child: Text(name.toString(),
                                         maxLines: 1,
@@ -142,11 +167,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                 ],
                               ),
                             ),
-                            Divider(
-                                color:
-                                    theme.colorScheme.onPrimary.withOpacity(1),
-                                indent: getHorizontalSize(13),
-                                endIndent: getHorizontalSize(12)),
+                        
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
@@ -155,33 +176,22 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(children: [
-                                          Padding(
-                                              padding: getPadding(bottom: 1),
-                                              child: Text("Phone:",
-                                                  style: CustomTextStyles
-                                                      .titleMediumOnPrimary)),
-                                          Text(phone.toString(),
-                                              style: CustomTextStyles
-                                                  .titleMediumOnPrimary),
-                                        ]),
-                                        Column(children: [
-                                          Padding(
-                                              padding: getPadding(bottom: 1),
-                                              child: Text("Email Adress:",
-                                                  style: CustomTextStyles
-                                                      .titleMediumOnPrimary)),
-                                          Text(phone.toString(),
-                                              style: CustomTextStyles
-                                                  .titleMediumOnPrimary),
-                                        ]),
+                                        Padding(
+                                          padding: getPadding(bottom: 1),
+                                          child: Icon(Icons.phone,size:20,color:Colors.green),
+                                        ),
+                                        Text(phone.toString(),
+                                            style: CustomTextStyles
+                                                .titleMediumOnPrimary),
+                                        Padding(
+                                            padding: getPadding(bottom: 1),
+                                            child: Icon(Icons.email,size:20,color:Colors.red),),
+                                        Text(phone.toString(),
+                                            style: CustomTextStyles
+                                                .titleMediumOnPrimary),
                                       ],
                                     ))),
-                            Divider(
-                                color:
-                                    theme.colorScheme.onPrimary.withOpacity(1),
-                                indent: getHorizontalSize(13),
-                                endIndent: getHorizontalSize(12)),
+                           
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
@@ -196,11 +206,13 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                               child: Text("Physical Adress:",
                                                   style: CustomTextStyles
                                                       .titleMediumOnPrimary)),
-                                          Text("Tanga - Korongwe",
+                                          Text("Korongwe",
                                               style: CustomTextStyles
                                                   .titleMediumOnPrimary),
                                         ]),
-                                        Column(children: [
+                                        Column(
+                                          children: [
+                                          
                                           Padding(
                                               padding: getPadding(bottom: 1),
                                               child: Text("Package:",
@@ -211,7 +223,9 @@ class _AccountsScreenState extends State<AccountsScreen> {
                                                   .titleMediumOnPrimary),
                                         ]),
                                       ],
-                                    ))),
+                                    )
+                                    )
+                                    ),
                           ],
                         ),
                       ),
@@ -219,17 +233,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
                   ]),
                 ),
 
-                Text(
-                  username.toString(),
-                ),
-                Text(
-                  name.toString(),
-                ),
-                Text(
-                  phone.toString(),
-                ),
-                TextButton(
-                    onPressed: () {}, child: const Text('LogOut/Sign Out'))
+                
               ],
             ),
           ),

@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hotel_booking/models/user.dart';
-import 'package:hotel_booking/pages/settings/profile_page.dart';
-import 'package:hotel_booking/utils/user_preferences.dart';
 import 'package:hotel_booking/widgets/new_widget/appbar_widget.dart';
 import 'package:hotel_booking/widgets/new_widget/button_widget.dart';
 import 'package:hotel_booking/widgets/new_widget/profile_widget.dart';
@@ -37,7 +35,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       username = userdata["email"] ?? "";
     });
   }
-  User user = UserPreferences.myUser;
+  // User user = UserPreferences.myUser;
 
   @override
   Widget build(BuildContext context) => Builder(
@@ -48,7 +46,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
-            imagePath: user.imagePath,
+            imagePath:"",
             isEdit: true,
             onClicked: () async {},
           ),
@@ -80,9 +78,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
    Widget  buildUpgradeButton(BuildContext context) => ButtonWidget(
         text: 'Update Profile',
         onClicked: () {
-          Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfilePage()),
-                  ); 
+          // Navigator.of(context).push(
+          //           MaterialPageRoute(builder: (context) => AccountsScreen()),
+          //         ); 
         },
       );
 }

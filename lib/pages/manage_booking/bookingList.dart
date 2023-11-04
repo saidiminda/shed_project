@@ -96,6 +96,41 @@ class _BookingListScreenState extends State<BookingListScreen> {
                         padding: getPadding(top: 1),
                       ),
                       SearchBooking(),
+                        Padding(
+                     padding: getPadding(left: 17,  right: 17, bottom: 5),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        gradient: const LinearGradient(colors: [
+                          Colors.orangeAccent,
+                             Colors.white,
+                          Colors.orangeAccent,
+                       
+                        ])
+                        ),
+                       
+                        child: Row(
+                           mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              "Number of Booking",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              "000",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                       Center(
                           child: FutureBuilder<List<BookingModel>>(
                               future: fetchBooking(),

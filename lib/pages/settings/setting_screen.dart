@@ -13,7 +13,9 @@ import 'package:hotel_booking/widgets/app_bar/appbar_subtitle.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xen_popup_card/xen_popup_card.dart';
+
+// import 'package:xen_popup_card/xen_popup_card.dart';
+import 'package:bottom_sheet/bottom_sheet.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -60,18 +62,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconTheme: IconThemeData(
-          color: Color.fromARGB(255, 8, 8, 8)),
+          iconTheme: IconThemeData(color: Color.fromARGB(255, 8, 8, 8)),
           title: Center(
             child: AppbarSubtitle(
               text: translation(context).settings,
             ),
-          )
-          ),
+          )),
       body: buildSettingsList(),
     );
   }
-  
+
   Widget buildSettingsList() {
     return SettingsList(
       sections: [
@@ -86,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: (context) {
                 showDialog(
                   context: context,
-                  builder: (builder) => XenPopupCard(
+                  builder: (builder) => Scaffold(
                     body: ListView(
                       children: [
                         // Padding(
@@ -137,7 +137,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       return null;
                                     },
                                     onChanged: (value) {
-
                                       selectedValue = value;
                                     },
                                     onSaved: (value) {
@@ -194,10 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       if (!isOpen) {
                                         saleTypeController.clear();
                                       }
-                                    }
-                                    )
-                                    )
-                                    ),
+                                    }))),
                       ],
                     ),
                   ),
@@ -215,16 +211,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // subtitleBelowTitle: true,
               leading: const Icon(Icons.language),
               onPressed: (context) {
-                showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20))),
-                    builder: (context) {
-                      return SizedBox(
-                        height: 200,
-                        child:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
+                showStickyFlexibleBottomSheet(
+                  minHeight: 0,
+                  initHeight: 0.5,
+                  maxHeight: 1,
+                  headerHeight: 200,
+                  context: context,
+                  bottomSheetColor: Colors.white,
+                  headerBuilder: (BuildContext context, double offset) {
+                    return Column(
+                      children: [
+                        Text(translation(context).changeLanguage),
+                      ],
+                    );
+                  },
+                  bodyBuilder: (BuildContext context, double offset) {
+                    return SliverChildListDelegate(
+                      <Widget>[
+                        Column(mainAxisSize: MainAxisSize.min, children: [
                           DropdownButton<Language>(
                             borderRadius: BorderRadius.circular(6),
                             underline: const SizedBox(),
@@ -248,8 +252,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 .toList(),
                           ),
                         ]),
-                      );
-                    });
+                      ],
+                    );
+                  },
+                  anchors: [0, 0.5, 1],
+                );
               },
             ),
           ],
@@ -262,58 +269,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: phone.toString(),
                 leading: const Icon(Icons.phone),
                 onPressed: (context) {
-                  showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(
-                            top: Radius.circular(20))),
+                  Widget _buildBottomSheet(
+                    BuildContext context,
+                    ScrollController scrollController,
+                    double bottomSheetOffset,
+                  ) {
+                    return Material(
+                      child: Container(
+                        child: ListView(
+                          controller: scrollController,
+                          children: [
+                            ListTile(
+                              leading: const Icon(
+                                Icons.call,
+                                color: Colors.greenAccent,
+                              ),
+                              title: const Text('Call'),
+                              onTap: () async {
+                                // ignore: deprecated_member_use
+                                await launch('tel:$phone');
+                                // ignore: use_build_context_synchronously
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.message,
+                                color: Color.fromARGB(255, 25, 11, 219),
+                              ),
+                              title: const Text('Message'),
+                              onTap: () async {
+                                // ignore: deprecated_member_use
+                                await launch('sms:$phone');
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              leading: const FaIcon(
+                                FontAwesomeIcons.whatsapp,
+                                color: Colors.greenAccent,
+                              ),
+                              title: const Text('WhatsApp'),
+                              onTap: () async {
+                                // ignore: deprecated_member_use
+                                await launch('https://wa.me/$phone');
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  showFlexibleBottomSheet(
+                    minHeight: 0,
+                    initHeight: 0.5,
+                    maxHeight: 1,
                     context: context,
-                    builder: (context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: const Icon(
-                              Icons.call,
-                              color: Colors.greenAccent,
-                            ),
-                            title: const Text('Call'),
-                            onTap: () async {
-                              // Launch the tel scheme with the phone number
-                              // ignore: deprecated_member_use
-                              await launch('tel:$phone');
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(
-                              Icons.message,
-                              color: Color.fromARGB(255, 25, 11, 219),
-                            ),
-                            title: const Text('Message'),
-                            onTap: () async {
-                              // ignore: deprecated_member_use
-                              await launch('sms:$phone');
-                              Navigator.pop(context);
-                            },
-                          ),
-                          ListTile(
-                            leading: const FaIcon(
-                              FontAwesomeIcons.whatsapp,
-                              color: Colors.greenAccent,
-                            ),
-                            title: const Text('WhatsApp'),
-                            onTap: () async {
-                              // Launch the WhatsApp URL with the phone number
-                              // ignore: deprecated_member_use
-                              await launch('https://wa.me/$phone');
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                    builder: _buildBottomSheet,
+                    anchors: [0, 0.5, 1],
+                    isSafeArea: true,
                   );
                 }),
             // the given area of the area of the angle of the
@@ -337,94 +353,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.lock),
               // ignore: deprecated_member_use
               onTap: () {
-                showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(
-                            top: Radius.circular(20)
-                            )
-                            ),
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 30),
-                        height: 300,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const TextField(
-                                  decoration: InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.check,
-                                        color: Colors.grey,
-                                      ),
-                                      label: Text(
-                                        'Old Password',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffB81736),
+                showStickyFlexibleBottomSheet(
+                  minHeight: 0,
+                  initHeight: 0.5,
+                  maxHeight: 1,
+                  headerHeight: 100,
+                  context: context,
+                  bottomSheetColor: Colors.white,
+                  headerBuilder: (BuildContext context, double offset) {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('Change Password'),
+                          ]),
+                    );
+                  },
+                  bodyBuilder: (BuildContext context, double offset) {
+                    return SliverChildListDelegate(
+                      <Widget>[
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const TextField(
+                                    decoration: InputDecoration(
+                                        suffixIcon: Icon(
+                                          Icons.check,
+                                          color: Colors.grey,
                                         ),
-                                      )),
-                                ),
-                                const TextField(
-                                  decoration: InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.visibility_off,
-                                        color: Colors.grey,
-                                      ),
-                                      label: Text(
-                                        'New Password',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffB81736),
-                                        ),
-                                      )),
-                                ),
-                                const TextField(
-                                  decoration: InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.visibility_off,
-                                        color: Colors.grey,
-                                      ),
-                                      label: Text(
-                                        'Confirm New Password',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffB81736),
-                                        ),
-                                      )),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  height: 40,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                      Color(0xffB81736),
-                                      Color(0xff281537),
-                                    ]),
+                                        label: Text(
+                                          'Old Password',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffB81736),
+                                          ),
+                                        )),
                                   ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Reset Password',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.white),
+                                  const TextField(
+                                    decoration: InputDecoration(
+                                        suffixIcon: Icon(
+                                          Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ),
+                                        label: Text(
+                                          'New Password',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffB81736),
+                                          ),
+                                        )),
+                                  ),
+                                  const TextField(
+                                    decoration: InputDecoration(
+                                        suffixIcon: Icon(
+                                          Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ),
+                                        label: Text(
+                                          'Confirm New Password',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffB81736),
+                                          ),
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gradient: const LinearGradient(colors: [
+                                        Color(0xffB81736),
+                                        Color(0xff281537),
+                                      ]),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Reset Password',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.white),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ]),
+                                ]),
+                          ),
                         ),
-                      );
-                    }
+                      ],
+                    );
+                  },
+                  anchors: [0, 0.5, 1],
                 );
               },
             ),
@@ -438,6 +465,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Navigator.pushNamed(context, AppRoutes.login);
     logOut();
   }
+
 // logout button
   logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

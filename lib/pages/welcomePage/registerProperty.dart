@@ -31,7 +31,6 @@ class _RegisterPropertyState extends State<RegisterProperty> {
     initial();
   }
 
-// the ar
   void initial() async {
     logindata = await SharedPreferences.getInstance();
     setState(() {
@@ -98,7 +97,6 @@ class _RegisterPropertyState extends State<RegisterProperty> {
 
         StorageService().writeSecureData(
             StorageItem('userId', loginResponse.id!.toString())),
-
         // _loading = false,
       },
       (exception) => {
@@ -346,7 +344,8 @@ class _RegisterPropertyState extends State<RegisterProperty> {
                                 }
                                 return null;
                               },
-                            )),
+                            )
+                            ),
 
                         Padding(
                           padding: getPadding(left: 8, top: 10, right: 6),
@@ -517,10 +516,14 @@ class _RegisterPropertyState extends State<RegisterProperty> {
                               }
                             },
                             alignment: Alignment.center)
-                      ]))),
+                      ]
+                      )
+                      )
+                      ),
         ),
       ),
-    ));
+    )
+    );
   }
 
   onTapSave(BuildContext context) {
@@ -530,5 +533,4 @@ class _RegisterPropertyState extends State<RegisterProperty> {
 
 onTapGetStart(BuildContext context) {
   Navigator.pushNamed(context, AppRoutes.dashboard);
-  // dispose();
 }

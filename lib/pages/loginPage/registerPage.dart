@@ -561,6 +561,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (response.statusCode == 200) {
       Map<String, dynamic> resposne = jsonDecode(response.body);
       if (!resposne['error']) {
+        // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, AppRoutes.welcomePage);
         print('imeenda');
       } else {
@@ -600,17 +601,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   actions: [
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                           Navigator.pop(context);
+                        },
                         child: const Icon(
                           Icons.close,
                         ))
                   ],
                 ),
                 body: SingleChildScrollView(
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  child: Column(mainAxisSize: MainAxisSize.min, children: const [
                     Padding(
-                      key: const Key('showMore'),
-                      padding: const EdgeInsets.all(16.0),
+                      key: Key('showMore'),
+                      padding: EdgeInsets.all(16.0),
                       child: ReadMoreText(
                         """ By clicking “Get Started”, or by submitting your information on any  EMA electronic platform 
                         (portal, website, survey etc.), you agree to the terms and conditions of this Agreement and 

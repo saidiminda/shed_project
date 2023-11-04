@@ -31,6 +31,16 @@ class _HomePageState extends State<HomePage> {
   bool _isExpanded = true;
   late SharedPreferences logindata;
   String? username, phone, name, nameHotel;
+  String greeting(){
+    var hour = DateTime.now().hour;
+    if(hour<12){
+      return 'Morning';
+    }
+    if(hour<17){
+      return 'Afternoon';
+    }
+    return 'Evening';
+  }
   @override
   void initState() {
     super.initState();
@@ -292,21 +302,36 @@ class _HomePageState extends State<HomePage> {
                                     left: 28,
                                     top: 1,
                                   ),
-                                  child: Column(
+                                  child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        AppbarTitle(
-                                          text: "Hi ! HYATT Hotel",
-                                        ),
-                                        AppbarSubtitle1(
-                                          margin: getMargin(
-                                            left: 3,
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                    children: [
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            AppbarTitle(
+                                              text: "Hi ! HYATT Hotel",
+                                            ),
+                                            AppbarSubtitle1(
+                                              margin: getMargin(
+                                                left: 3,
+                                              ),
+                                              text: translation(context).homePage,
+                                              // translation(context).homePage
+                                            ),
+                                          ]),
+                                          Padding(
+                                            padding: getPadding(
+                                    right: 10,
+                                  ),
+                                            child: AppbarSubtitle1(
+                                                text:  greeting(),
+                                              ),
                                           ),
-                                          text: translation(context).homePage,
-                                          // translation(context).homePage
-                                        ),
-                                      ]),
+                                    ],
+                                  ),
                                 ),
                                 SearchPage(),
                                 // search

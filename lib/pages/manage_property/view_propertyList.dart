@@ -59,6 +59,41 @@ class ViewPropertyListScreen extends StatelessWidget {
                       Padding(
                         padding: getPadding(top: 5),
                       ),
+                           Padding(
+                     padding: getPadding(left: 17,  right: 17, bottom: 5),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        gradient: const LinearGradient(colors: [
+                          Colors.orangeAccent,
+                             Colors.white,
+                          Colors.orangeAccent,
+                       
+                        ])
+                        ),
+                       
+                        child: Row(
+                           mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              "Number of Room",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              "000",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                       Container(
                           margin: getMargin(left: 13, top: 2, right: 13),
                           padding: getPadding(

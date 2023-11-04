@@ -3,6 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
+import 'package:hotel_booking/models/user.dart';
 import 'package:hotel_booking/service/manage_client/manageClientController.dart';
 import 'package:hotel_booking/utils/app_export.dart';
 import 'package:hotel_booking/widgets/app_bar/appbar_subtitle.dart';
@@ -14,7 +15,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore_for_file: must_be_immutable
 class AddClientScreen extends StatefulWidget {
-  const AddClientScreen({Key? key}) : super(key: key);
+  //  final User user;
+  const AddClientScreen({Key? key,
+  //  required this.user
+   }) : super(key: key);
 
   @override
   State<AddClientScreen> createState() => _AddClientScreenState();
