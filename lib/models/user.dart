@@ -10,8 +10,8 @@ class User {
   String? address;
   String? email;
   String? role;
-  String? country;
-  String? picture;
+  String? reference_no;
+  String? register_as;
   int? owner;
 
   User({
@@ -21,8 +21,8 @@ class User {
     this.name,
     this.phone,
     this.role,
-    this.country,
-    this.picture,
+    this.reference_no,
+    this.register_as,
     this.owner
   });
 
@@ -34,8 +34,8 @@ class User {
       email: map['email'],
       phone: map['phone'],
       role: map['role'],
-      country: map['country'],
-      picture: map['picture'],
+      reference_no: map['reference_no'],
+      register_as: map['register_as'],
     );
   }
 }

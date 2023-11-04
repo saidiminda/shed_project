@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hotel_booking/service/local_service/local_services.dart';
 import '../../apis.dart';
-import '../../models/user/user.dart';
+import '../../models/user.dart';
 
 class AuthServices {
   final Dio _dio = Dio();
@@ -45,7 +45,7 @@ class AuthServices {
           "phone": user['phone'],
           "address": user['address'],
           "role": userData['role'],
-          "country": userData['country'],
+          "register_as": userData['register_as'],
         };
         await local.setInstance(key: "hasLogin", type: bool, value: true);
         await local.setInstance(key: "isNewUser", type: bool, value: false);

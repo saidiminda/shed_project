@@ -11,10 +11,15 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../models/user.dart';
+
 // ignore: must_be_immutable
 class WelcomePage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  WelcomePage({Key? key}) : super(key: key);
+    final User? user;
+  final int? index;
+  final String? role;
+  WelcomePage({Key? key, this.user, this.index=0, this.role}) : super(key: key);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
