@@ -17,14 +17,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../service/manage_rooms/roomServices.dart';
 
 // ignore_for_file: must_be_immutable
-class AddBookingScreen extends StatefulWidget {
-  const AddBookingScreen({Key? key}) : super(key: key);
+class EditRoomScreen extends StatefulWidget {
+  const EditRoomScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddBookingScreen> createState() => _AddBookingScreenState();
+  State<EditRoomScreen> createState() => _EditRoomScreenState();
 }
 
-class _AddBookingScreenState extends State<AddBookingScreen> {
+class _EditRoomScreenState extends State<EditRoomScreen> {
   TextEditingController checkOutdateController = TextEditingController();
 
   RegiserPropertyService addRoom = RegiserPropertyService();
@@ -87,7 +87,6 @@ void initState() {
   }
 
   Future<void> _createRoom(BuildContext context) async {
-     logindata = await SharedPreferences.getInstance();
     var userdata = jsonDecode(logindata.getString('userData') ?? "");
     int userId = int.parse(userdata["id"].toString());
     Map<String, dynamic> newccount = {
@@ -123,29 +122,7 @@ void initState() {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 8, 8, 8)),
-        title: Center(
-          child: AppbarSubtitle(
-            text: translation(context).add_room,
-          ),
-        ),
-      ),
-      body: SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-          header: const WaterDropHeader(
-            idleIcon: Icon(Icons.autorenew, size: 25, color: Colors.white),
-            waterDropColor: Color.fromARGB(255, 235, 182, 113),
-          ),
-          child: SingleChildScrollView(
+    return  SingleChildScrollView(
             child: Form(
                 key: _formKey,
                 child: Container(
@@ -443,8 +420,8 @@ void initState() {
                               },
                               alignment: Alignment.center)
                         ]))),
-          )),
-    ));
+       
+    );
   }
 
   onTapSave(BuildContext context) {

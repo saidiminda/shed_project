@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
 import 'package:hotel_booking/utils/app_export.dart';
 import 'package:hotel_booking/widgets/booking.dart';
@@ -31,16 +32,18 @@ class _HomePageState extends State<HomePage> {
   bool _isExpanded = true;
   late SharedPreferences logindata;
   String? username, phone, name, nameHotel;
-  String greeting(){
+
+  String greeting() {
     var hour = DateTime.now().hour;
-    if(hour<12){
-      return 'Morning';
+    if (hour < 12) {
+      return 'Good Morning!';
     }
-    if(hour<17){
-      return 'Afternoon';
+    if (hour < 17) {
+      return 'Good Afternoon!';
     }
-    return 'Evening';
+    return 'Good Evening!';
   }
+
   @override
   void initState() {
     super.initState();
@@ -303,9 +306,8 @@ class _HomePageState extends State<HomePage> {
                                     top: 1,
                                   ),
                                   child: Row(
-                                      mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                           mainAxisAlignment:
@@ -318,18 +320,20 @@ class _HomePageState extends State<HomePage> {
                                               margin: getMargin(
                                                 left: 3,
                                               ),
-                                              text: translation(context).homePage,
+                                              text:
+                                                  translation(context).homePage,
                                               // translation(context).homePage
                                             ),
                                           ]),
-                                          Padding(
-                                            padding: getPadding(
-                                    right: 10,
-                                  ),
-                                            child: AppbarSubtitle1(
-                                                text:  greeting(),
-                                              ),
-                                          ),
+                                      Padding(
+                                        padding: getPadding(
+                                          right: 15,
+                                        ),
+                                        child: Text(greeting(),style: TextStyle(fontSize: 12,color:Color.fromARGB(255, 245, 90, 51)),),
+                                        // AppbarSubtitle1(
+                                        //   text: greeting(),
+                                        // ),
+                                      ),
                                     ],
                                   ),
                                 ),

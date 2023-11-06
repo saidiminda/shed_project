@@ -122,13 +122,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                 controller: nameController,
                 hintText: translation(context).name,
                 hintStyle: theme.textTheme.bodyLarge!,
-                validator: (client) {
-                  if (client == null || client.isEmpty) {
-                    return translation(context).please_enter +
-                        translation(context).name;
-                  }
-                  return null;
-                },
+             
               )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
@@ -144,13 +138,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                       defaultCountryCode: _initialCountryData?.countryCode,
                     )
                   ],
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).phone;
-                    }
-                    return null;
-                  })),
+               )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
               child: CustomTextFormField(
@@ -159,13 +147,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   hintText: translation(context).email,
                   hintStyle: theme.textTheme.bodyLarge!,
                   textInputType: TextInputType.emailAddress,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).email;
-                    }
-                    return null;
-                  })),
+                 )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
               child: CustomTextFormField(
@@ -173,13 +155,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   controller: addressController,
                   hintText: translation(context).address,
                   hintStyle: theme.textTheme.bodyLarge!,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).address;
-                    }
-                    return null;
-                  })),
+                 )),
           Padding(
               padding: getPadding(
                 left: 8,
@@ -191,12 +167,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   labelText: translation(context).nationality,
                   hintText: translation(context).nationality,
                   hintStyle: theme.textTheme.bodyLarge!,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).nationality;
-                    }
-                  })),
+                )),
           SizedBox(
               child: Padding(
                   padding: getPadding(left: 8, top: 10, right: 6),
@@ -288,7 +259,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                           return item.value.toString().contains(searchValue);
                         },
                       ),
-                      //This to clear the search value when you close the menu
+                     
                       onMenuStateChange: (isOpen) {
                         if (!isOpen) {
                           idTypevalueController.clear();
@@ -302,12 +273,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   hintText: translation(context).identity_number,
                   hintStyle: theme.textTheme.bodyLarge!,
                   textInputType: TextInputType.number,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).identity_number;
-                    }
-                  })),
+                 )),
           Padding(
               padding: getPadding(
                 left: 8,
@@ -319,12 +285,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   labelText: translation(context).place_birth,
                   hintText: translation(context).place_birth,
                   hintStyle: theme.textTheme.bodyLarge!,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).place_birth;
-                    }
-                  })),
+                )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
               child: CustomTextFormField(
@@ -332,13 +293,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   labelText: translation(context).occupation,
                   hintText: translation(context).occupation,
                   hintStyle: theme.textTheme.bodyLarge!,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).occupation;
-                    }
-                    return null;
-                  })),
+                 )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
               child: CustomTextFormField(
@@ -360,13 +315,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
 
                     dateOfBirthController.text = date.toIso8601String();
                   },
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).date_of_birth;
-                    }
-                    return null;
-                  })),
+                )),
           Padding(
               padding: getPadding(left: 8, top: 10, right: 6),
               child: CustomTextFormField(
@@ -374,13 +323,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   labelText: translation(context).tribe,
                   hintText: translation(context).tribe,
                   hintStyle: theme.textTheme.bodyLarge!,
-                  textInputAction: TextInputAction.done,
-                  validator: (client) {
-                    if (client == null || client.isEmpty) {
-                      return translation(context).please_enter +
-                          translation(context).tribe;
-                    }
-                  })),
+                  textInputAction: TextInputAction.done,)),
+
           CustomOutlinedButton(
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -389,21 +333,17 @@ class _EditClientScreenState extends State<EditClientScreen> {
               width: getHorizontalSize(185),
               // translation(context).save
               text: 'Update',
-              margin: getMargin(left: 70, top: 38, bottom: 50, right: 40),
+              margin: getMargin(left: 40, top: 38, bottom: 50, right: 40),
               onTap: () {
-                if (_formKey.currentState!.validate()) {
                   _createClient(context);
-                  onTapSave(context);
+                 
                   Navigator.pop(context);
-                }
+                // if (_formKey.currentState!.validate()) {
+                
+                // }
               })
         ]),
    
     );
-  }
-
-  onTapSave(BuildContext context) {
-    // HomePage();
-    // Navigator.pushNamed(context, AppRoutes.clientListScreen);
   }
 }

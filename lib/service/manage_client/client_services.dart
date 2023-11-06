@@ -3,6 +3,7 @@ import 'package:hotel_booking/database/database_manager.dart';
 import 'package:hotel_booking/models/manageClient/clientModel.dart';
 
 import '../../apis.dart';
+// the given area of the following above
 class ClientServices {
   final Dio _dio = Dio();
   final String _host = apis.host;
@@ -37,7 +38,7 @@ class ClientServices {
     final _clients = await db.query("clients", orderBy: "id ASC");
     if (_clients.isNotEmpty) {
       clients = _clients.map((gap) {
-        return ClientclientModel.fromMap(gap);
+        return ClientclientModel.fromJson(gap);
       }).toList();
     }
     return clients;

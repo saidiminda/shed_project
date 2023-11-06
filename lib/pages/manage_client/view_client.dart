@@ -36,14 +36,15 @@ class _ClientListScreenState extends State<ClientListScreen> {
   String? username, phone;
   void _onRefresh() async {
     // monitor network fetch
-    fetchAlbum();
+    
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
+
   void _onLoading() async {
     // monitor network fetch
-    fetchAlbum();
+    
     await Future.delayed(Duration(milliseconds: 1000));
 
     _refreshController.loadComplete();
@@ -121,7 +122,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            gradient:const LinearGradient(colors: [
+                            gradient: const LinearGradient(colors: [
                               Colors.orangeAccent,
                               Colors.white,
                               Colors.orangeAccent,
@@ -150,8 +151,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
                     SingleChildScrollView(
                       child: Center(
                         child: FutureBuilder<List<ClientclientModel>>(
+                          initialData: [],
                           future: fetchAlbum(),
                           builder: (context, snapshot) {
+                            
                             if (snapshot.hasData) {
                               return ListView.builder(
                                 shrinkWrap: true,
@@ -352,7 +355,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                                                 ),
                                                                 CircleAvatar(
                                                                   foregroundColor:
-                                                                      const Color.fromARGB(
+                                                                      const Color
+                                                                              .fromARGB(
                                                                           255,
                                                                           113,
                                                                           238,
@@ -370,8 +374,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                                                         Icons
                                                                             .edit),
                                                                     onTap: () {
-                                                                      
                                                                       showStickyFlexibleBottomSheet(
+                                                                  
                                                                         minHeight:
                                                                             0,
                                                                         initHeight:
@@ -379,7 +383,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                                                         maxHeight:
                                                                             1,
                                                                         headerHeight:
-                                                                           100,
+                                                                            60,
                                                                         context:
                                                                             context,
                                                                         bottomSheetColor:
@@ -388,25 +392,49 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                                                                 context,
                                                                             double
                                                                                 offset) {
-                                                                          return Padding(
+                                                                          return Container(child:     Padding(
                                                                             padding:
-                                                                                const EdgeInsets.all(10.0),
+                                                                                const EdgeInsets.all(5.0),
                                                                             child:
-                                                                                Row(mainAxisAlignment: MainAxisAlignment.center, 
-                                                                                children:  [
-                                                                                    IconButton(onPressed: (){
-                                                                                 Navigator.pop(context);
-                                                                              }, 
-                                                                              icon: const Icon(Icons.arrow_back_outlined)),
-                                                                                SizedBox(width: 50),
-                                                                              Text('Edit Client Details'),
-                                                                              SizedBox(width: 50),
-                                                                              IconButton(onPressed: (){
-                                                                                 Navigator.pop(context);
-                                                                              }, 
-                                                                              icon: const Icon(Icons.close_rounded))
+                                                                                Column(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center, 
+                                                                                children: [
+                                                                              Row(
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      icon: const Icon(Icons.arrow_back_outlined)),
+                                                                                  const SizedBox(width: 50),
+                                                                                  Text(
+                                                                                    'Edit Client Details',
+                                                                                    style: const TextStyle(color: Colors.orangeAccent),
+                                                                                  ),
+                                                                                  SizedBox(width: 80),
+                                                                                  IconButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    icon: const Icon(Icons.close_rounded),
+                                                                                    color: Colors.red,
+                                                                                  )
+                                                                                ],
+                                                                              ),
                                                                             ]),
+                                                                          ),
+                                                                                decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(30.0),
+                                                                            topRight:
+                                                                                Radius.circular(30.0),
+                                                                          ),
+                                                                        ),
                                                                           );
+                                                                      
                                                                         },
                                                                         bodyBuilder: (BuildContext
                                                                                 context,
@@ -414,7 +442,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                                                                 offset) {
                                                                           return SliverChildListDelegate(
                                                                             <Widget>[
-                                                                           EditClientScreen(),
+                                                                              EditClientScreen(),
                                                                             ],
                                                                           );
                                                                         },

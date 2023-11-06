@@ -8,6 +8,7 @@ import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:hotel_booking/classes/language.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
 import 'package:hotel_booking/main.dart';
+import 'package:hotel_booking/pages/settings/change_password.dart';
 import 'package:hotel_booking/utils/app_export.dart';
 import 'package:hotel_booking/widgets/app_bar/appbar_subtitle.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -362,92 +363,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   bottomSheetColor: Colors.white,
                   headerBuilder: (BuildContext context, double offset) {
                     return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text('Change Password'),
-                          ]),
-                    );
+                                                                            padding:
+                                                                                const EdgeInsets.all(5.0),
+                                                                            child:
+                                                                                Column(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center, 
+                                                                                children: [
+                                                                              Row(
+                                                                                children: [
+                                                                                  IconButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      icon: const Icon(Icons.arrow_back_outlined)),
+                                                                                  const SizedBox(width: 50),
+                                                                                  Text(
+                                                                                    'Change Password',
+                                                                                    style: const TextStyle(color: Colors.orangeAccent),
+                                                                                  ),
+                                                                                  SizedBox(width: 80),
+                                                                                  IconButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    icon: const Icon(Icons.close_rounded),
+                                                                                    color: Colors.red,
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ]),
+                                                                          );
                   },
                   bodyBuilder: (BuildContext context, double offset) {
                     return SliverChildListDelegate(
                       <Widget>[
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const TextField(
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(
-                                          Icons.check,
-                                          color: Colors.grey,
-                                        ),
-                                        label: Text(
-                                          'Old Password',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xffB81736),
-                                          ),
-                                        )),
-                                  ),
-                                  const TextField(
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(
-                                          Icons.visibility_off,
-                                          color: Colors.grey,
-                                        ),
-                                        label: Text(
-                                          'New Password',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xffB81736),
-                                          ),
-                                        )),
-                                  ),
-                                  const TextField(
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(
-                                          Icons.visibility_off,
-                                          color: Colors.grey,
-                                        ),
-                                        label: Text(
-                                          'Confirm New Password',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xffB81736),
-                                          ),
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      gradient: const LinearGradient(colors: [
-                                        Color(0xffB81736),
-                                        Color(0xff281537),
-                                      ]),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Reset Password',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        ),
+                        ChangePassword(),
                       ],
                     );
                   },

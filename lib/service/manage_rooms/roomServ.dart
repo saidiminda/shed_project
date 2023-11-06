@@ -24,7 +24,7 @@ class ClientServices {
       }
 
       clients.forEach((client) async {
-        await client.saveToLocalDatabase(client);
+        // await client.saveToLocalDatabase(client);
       });
       return clients;
     } else {
@@ -60,7 +60,7 @@ class ClientServices {
         }).toList();
       }
       clients.forEach((client) async {
-        await client.saveToLocalDatabase(client);
+        // await client.saveToLocalDatabase(client);
       });
       return clients;
     } else {

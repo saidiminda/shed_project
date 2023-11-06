@@ -84,26 +84,30 @@ class _SignInState extends State<SignIn> {
                           child: Container(
                         height: 200,
                         width: 200,
-                        child: Column(
-                          children: const [
-                            Text(
-                              'EMASUITE',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 24),
-                            ),
-                            Text(
-                              'enterprise management \nand automation',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
-                           
-                            // Image.asset(
-                            //   "assets/images/logo.png",
-                            //   height: 200,
-                            //   width: 200,
-                            //   alignment: Alignment.center,
-                            // ),
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: const [
+                              
+                              Text(
+                                'EMASUITE',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 24),
+                              ),
+                              Text(
+                                'enterprise management \nand automation',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12),
+                              ),
+                             
+                              // Image.asset(
+                              //   "assets/images/logo.png",
+                              //   height: 200,
+                              //   width: 200,
+                              //   alignment: Alignment.center,
+                              // ),
+                            ],
+                          ),
                         ),
                       )),
                       Text(

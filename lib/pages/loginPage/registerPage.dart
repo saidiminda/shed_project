@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hotel_booking/classes/language_constants.dart';
 import 'package:hotel_booking/constants.dart';
 import 'package:hotel_booking/models/user_type.dart';
-import 'package:hotel_booking/pages/welcomePage/welcomePage.dart';
 import 'package:hotel_booking/service/auth_service/auth_service.dart';
 import 'package:hotel_booking/service/helper_services.dart';
 import 'package:hotel_booking/service/roomTypes/typesServices.dart';
@@ -426,8 +425,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 ? null
                                 : () {
                                     if (_formKey.currentState!.validate()) {
-                                      createUser();
+                                      createUser(
+                                          fullname.text,
+                                          address.text,
+                                          email.text,
+                                          phone.text,
+                                          register_as.text,
+                                          password.text,
+                                          reference_no.text);
                                     }
+                                    @override
+                                    void initState() {
+                                      fullname.text = '';
+                                      address.text = '';
+                                      email.text = '';
+                                      phone.text = '';
+                                      register_as.text = '';
+                                      password.text = '';
+                                      reference_no.text = '';
+                                    }
+
+                                    ;
                                   },
                           ),
                   ),
@@ -519,47 +537,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     setState(() {});
   }
 
-  createUser() async {
-      try {
-        Map<String, dynamic> userData = {
-          "name": fullname.text,
-          "address": address.text,
-          "email": email.text,
-          "phone": phone.text,
-          "register_as": registerAs,
-          "password": password.text,
-          // "role": userType,
-          "reference_no": reference_no.text,
-        };
-        final results = await auth.createUser(userData: userData);
-        if (results is User) {
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>WelcomePage(user: results, index: 1),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(results), backgroundColor: Colors.red),
-          );
-        }
-      } catch (e) {
-        print(e);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Connection error"), backgroundColor: Colors.red),
-        );
-      }
-      setState(() {
-        isLoading = false;
-      });
+  // createUser() async {
+  //     try {
+  //       Map<String, dynamic> userData = {
+  //         "name": fullname.text,
+  //         "address": address.text,
+  //         "email": email.text,
+  //         "phone": phone.text,
+  //         "register_as": registerAs,
+  //         "password": password.text,
+  //         // "role": userType,
+  //         "reference_no": reference_no.text,
+  //       };
+  //       final results = await auth.createUser(userData: userData);
+  //       if (results is User) {
+  //         // ignore: use_build_context_synchronously
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) =>WelcomePage(user: results, index: 1),
+  //           ),
+  //         );
+  //       } else {
+  //         // ignore: use_build_context_synchronously
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text(results), backgroundColor: Colors.red),
+  //         );
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //             content: Text("Connection error"), backgroundColor: Colors.red),
+  //       );
+  //     }
+  //     setState(() {
+  //       isLoading = false;
+  //     });
     
-  }
+  // }
 
 // create user
-  createUser1(fullname, address, email, phone, registerAs, password,
+  createUser(fullname, address, email, phone, registerAs, password,
       referenceNo) async {
     Map data = {
       "name": fullname,
